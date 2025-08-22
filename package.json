@@ -8,14 +8,14 @@
     "build": "electron-builder"
   },
   "keywords": [],
-  "author": "Your Name",
+  "author": "Luidi Matheus",
   "license": "MIT",
   "dependencies": {
-    "electron": "^28.2.3",
     "express": "^4.18.2",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
+    "electron": "^28.2.3",
     "electron-builder": "^24.9.1"
   },
   "build": {
