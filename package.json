@@ -1,18 +1,45 @@
 {
   "name": "address-search-app",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "An Electron-based desktop application for searching a large, local U.S. address dataset stored in an SQLite database.",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron .",
+    "build": "electron-builder"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Your Name",
+  "license": "MIT",
   "dependencies": {
-    "csv-parser": "^3.2.0",
-    "express": "^5.1.0",
-    "pg": "^8.16.3",
+    "electron": "^28.2.3",
+    "express": "^4.18.2",
     "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.luidimso.addresssearchapp",
+    "files": [
+      "**/*",
+      "!**/*.csv",
+      "!**/*.zip",
+      "addresses.db"
+    ],
+    "extraFiles": [
+      "addresses.db"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "appimage"
+    }
   }
 }
