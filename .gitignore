@@ -4,3 +4,16 @@ node_modules/
 # Database file
 addresses.db
 
+# Generated CSV files
+cleaned_addresses.csv
+cleaned_addresses2.csv
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Other temporary files
+npm-debug.log*
+
+# Add this line to ignore the entire build output directory
+/dist/
