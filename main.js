@@ -1,12 +1,22 @@
 const { app, BrowserWindow, dialog } = require('electron');
 const path = require('path');
-const url = require('url');
+const fs = require('fs');
 
-// This is the key change: ensure your server is a module that can be imported
+// Use a simple fs.appendFileSync to log errors immediately.
+function logError(message) {
+    const logPath = path.join(app.getPath('userData'), 'error.log');
+    fs.appendFileSync(logPath, `${new Date().toISOString()}: ${message}\n`);
+}
+
+// Log a startup message to know the application started
+logError('Application process started.');
+
 const server = require('./server'); 
 
+let mainWindow;
+
 function createWindow() {
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
@@ -15,35 +25,31 @@ function createWindow() {
         }
     });
 
-    // Pass the correct database path to the server before starting it
-    const dbPath = path.join(process.resourcesPath, 'addresses.db');
-    console.log(`Database path: ${dbPath}`);
-
-    // Call a function in your server.js to start the server with the correct path
-    server.start(dbPath);
-
-    // Load the index.html file
-    const startUrl = url.format({
-        pathname: path.join(__dirname, 'index.html'),
-        protocol: 'file:',
-        slashes: true
-    });
-    
-    mainWindow.loadURL(startUrl);
+    const indexPath = path.join(__dirname, 'index.html');
+    mainWindow.loadFile(indexPath);
 }
 
 app.whenReady().then(() => {
-    createWindow();
-
-    app.on('activate', () => {
-        if (BrowserWindow.getAllWindows().length === 0) {
-            createWindow();
-        }
-    });
+    try {
+        logError('App is ready. Attempting to start server.');
+        const destPath = path.join(process.resourcesPath, 'addresses.db');
+        server.start(destPath);
+        createWindow();
+    } catch (error) {
+        logError(`Initialization Error: ${error.message}`);
+        dialog.showErrorBox('Initialization Error', 'Failed to initialize the application. Error: ' + error.message);
+        app.quit();
+    }
 });
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
+    }
+});
+
+app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
     }
 });

@@ -5,11 +5,9 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
-  "keywords": [],
-  "author": "Luidi Matheus",
-  "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
     "sqlite3": "^5.1.7"
@@ -21,13 +19,13 @@
   "build": {
     "appId": "com.luidimso.addresssearchapp",
     "files": [
-      "**/*",
-      "!**/*.csv",
-      "!**/*.zip",
+      "**/*"
+    ],
+    "extraResources": [
       "addresses.db"
     ],
-    "extraFiles": [
-      "addresses.db"
+    "asarUnpack": [
+      "**/node_modules/sqlite3/**/*"
     ],
     "directories": {
       "output": "dist"
